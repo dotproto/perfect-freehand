@@ -322,7 +322,7 @@ export function getStrokeOutlinePoints(
       // crossing future points.
 
       // Use mutable operations for the offset calculation
-      perInto(_offset, prevVector)
+      perInto(_offset, vector)
       mulInto(_offset, _offset, radius)
 
       const step = 1 / CORNER_CAP_SEGMENTS
@@ -415,6 +415,7 @@ export function getStrokeOutlinePoints(
 
   const endCap: Vec2[] = []
 
+  /// @ts-expect-error Debugging
   globalThis.points = points;
   // Draw a dot for very short or completed strokes
   if (points.length === 1) {
