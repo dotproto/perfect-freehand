@@ -314,6 +314,8 @@ export function getStrokeOutlinePoints(
     const isPointSharpCorner = prevDpr < 0 && !isPrevPointSharpCorner
     const isNextPointSharpCorner = nextDpr !== null && nextDpr < 0
 
+    console.log({nextDpr, prevDpr, isPrevPointSharpCorner, isPointSharpCorner, isNextPointSharpCorner });
+
     if (isPointSharpCorner || isNextPointSharpCorner) {
       // It's a sharp corner. Draw a rounded cap and move on to the next point
       // Considering saving these and drawing them later? So that we can avoid
@@ -413,6 +415,7 @@ export function getStrokeOutlinePoints(
 
   const endCap: Vec2[] = []
 
+  globalThis.points = points;
   // Draw a dot for very short or completed strokes
   if (points.length === 1) {
     if (!(taperStart || taperEnd) || isComplete) {
