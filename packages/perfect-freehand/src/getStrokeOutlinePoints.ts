@@ -12,6 +12,8 @@ import type { StrokeOptions, StrokePoint, Vec2 } from './types'
 import {
   add,
   addInto,
+  ang,
+  cpr,
   dist2,
   dpr,
   lrpInto,
@@ -309,12 +311,15 @@ export function getStrokeOutlinePoints(
 
     const nextVector = (!isLastPoint ? points[i + 1] : points[i]).vector
     const nextDpr = !isLastPoint ? dpr(vector, nextVector) : 1.0
+    const nextCpr = !isLastPoint ? cpr(vector, nextVector) : 1.0;
     const prevDpr = dpr(vector, prevVector)
+
+    const angle = Math.atan2(vector[1] - nextVector[1], vector[0] - nextVector[0]);
 
     const isPointSharpCorner = prevDpr < 0 && !isPrevPointSharpCorner
     const isNextPointSharpCorner = nextDpr !== null && nextDpr < 0
 
-    console.log({nextDpr, prevDpr, isPrevPointSharpCorner, isPointSharpCorner, isNextPointSharpCorner });
+    console.log({angle, nextDpr, prevDpr, isPrevPointSharpCorner, isPointSharpCorner, isNextPointSharpCorner });
 
     if (isPointSharpCorner || isNextPointSharpCorner) {
       // It's a sharp corner. Draw a rounded cap and move on to the next point
@@ -325,17 +330,25 @@ export function getStrokeOutlinePoints(
       perInto(_offset, vector)
       mulInto(_offset, _offset, radius)
 
+
+      const lRot = FIXED_PI - angle/2;
+      const rRot = FIXED_PI + angle/2;
+
+      // const dir = nextCpr > 0 ? 1 : -1;
+      // const lRot = FIXED_PI + ang();
+      // const rRot = FIXED_PI * 1;
+
       const step = 1 / CORNER_CAP_SEGMENTS
       for (let t = 0; t <= 1; t += step) {
         // Calculate left point: rotate (point - offset) around point
         subInto(_tl, point, _offset)
-        rotAroundInto(_tl, _tl, point, FIXED_PI * t)
+        rotAroundInto(_tl, _tl, point, lRot * t)
         tempLeftPoint = [_tl[0], _tl[1]]
         leftPts.push(tempLeftPoint)
 
         // Calculate right point: rotate (point + offset) around point
         addInto(_tr, point, _offset)
-        rotAroundInto(_tr, _tr, point, FIXED_PI * -t)
+        rotAroundInto(_tr, _tr, point, rRot * -t)
         tempRightPoint = [_tr[0], _tr[1]]
         rightPts.push(tempRightPoint)
       }

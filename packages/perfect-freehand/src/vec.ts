@@ -1,5 +1,8 @@
 import type { Vec2 } from './types'
 
+const { PI } = Math
+const PI_2 = PI / 2;
+
 /**
  * Negate a vector.
  * @param A
@@ -97,6 +100,51 @@ export function per(A: Vec2): Vec2 {
   return [A[1], -A[0]]
 }
 
+// angle = atan2(vector2.y, vector2.x) - atan2(vector1.y, vector1.x);
+export function ang(A: Vec2, B: Vec2) {
+  return approxAtan2(B[1], B[0]) - approxAtan2(A[1], A[0])
+}
+
+/**
+ * A fast approximation of atan
+ * https://www-labs.iro.umontreal.ca/~mignotte/IFT2425/Documents/EfficientApproximationArctgFunction.pdf
+ * https://www.dsprelated.com/showarticle/1052.php
+ */
+export function approxAtan(ratio: number) {
+    const n1 = 0.97239411;
+    const n2 = -0.19194795;
+    return (n1 + n2 * ratio * ratio) * ratio;
+}
+
+export function approxAtan2(y: number, x: number) {
+  if (x != 0.0) {
+    if (Math.abs(x) > Math.abs(y)) {
+        const z = y / x
+        if (x > 0.0) {
+          return approxAtan(z)
+        } else if (y >= 0.0) {
+          return approxAtan(z) + PI
+        } else {
+            return approxAtan(z) - PI
+        }
+    } else {
+        const z = x / y;
+        if (y > 0.0) {
+            return -approxAtan(z) + PI_2
+        } else {
+            return -approxAtan(z) - PI_2
+        }
+    }
+  } else {
+    if (y > 0.0) {
+        return PI_2;
+    } else if (y < 0.0)  {
+        return -PI_2;
+    }
+  }
+  return 0.0
+}
+
 /**
  * Perpendicular rotation into an existing output vector (allocation-free).
  * @param out Output vector to mutate
@@ -118,6 +166,16 @@ export function perInto(out: Vec2, A: Vec2): Vec2 {
  */
 export function dpr(A: Vec2, B: Vec2): number {
   return A[0] * B[0] + A[1] * B[1]
+}
+
+/**
+ * Cross product
+ * @param A
+ * @param B
+ * @internal
+ */
+export function cpr(A: Vec2, B: Vec2): number {
+  return A[0] * B[1] - A[1] * B[0];
 }
 
 /**
