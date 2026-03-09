@@ -1,8 +1,5 @@
 import type { Vec2 } from './types'
 
-const { PI } = Math
-const PI_2 = PI / 2;
-
 /**
  * Negate a vector.
  * @param A

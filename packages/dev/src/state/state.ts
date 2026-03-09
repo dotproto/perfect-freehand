@@ -10,9 +10,7 @@ import {
 import { Vec } from '@tldraw/vec'
 import { StateManager } from 'rko'
 import { draw, DrawUtil } from './shapes'
-// import sample from './sample.json'
-// import sample from './zigzag.json'
-import sample from './zagzig.json'
+import sample from './sample.json'
 import type { StateSelector } from 'zustand'
 import { copyTextToClipboard, pointInPolygon } from './utils'
 import { EASING_STRINGS } from './easings'
@@ -83,27 +81,8 @@ export class AppState extends StateManager<State> {
     window['app'] = this
 
     if (Object.values(this.state.page.shapes).length === 0) {
-      // this.addShape({ id: 'sample', points: sample })
-      this.addShape({ id: 'zigzag', points: [
-        [10.8, 289.36],
-        [4.59, 344.4105],
-        [36.767, 336.9409625],
-        [198.682975, 144.8789091],
-        [156.6602644, 305.4827864],
-        [184.0933624, 324.9391842],
-        [174.793679, 389.2649033],
-        [267.6828136, 268.3568339],
-        [205.2074458, 411.6946544],
-        [346.5151645, 223.7014781],
-        [276.7819449, 382.2741282],
-        [396.9213266, 227.5450045],
-        [376.3413138, 276.6471269],
-        [377.9275584, 302.6847789],
-        [558.3064623, 128.641031],
-        [508.1224965, 256.9114382],
-        [453.16, 376.38],
-      ] })
-      this.centerShape('zigzag')
+      this.addShape({ id: 'sample', points: sample })
+      this.centerShape('sample')
     }
   }
 
