@@ -313,8 +313,7 @@ export function getStrokeOutlinePoints(
     const nextDpr = !isLastPoint ? dpr(vector, nextVector) : 1.0
     const prevDpr = dpr(vector, prevVector)
 
-    const adjust = Math.atan2(vector[1] - nextVector[1], vector[0] - nextVector[0]) / 2;
-    // const adjust = 0;
+    const adjust = Math.atan2(vector[0] * nextVector[1] - vector[1] * nextVector[0], vector[0] * nextVector[0] + vector[1] * nextVector[1]) / 2;
 
     const isPointSharpCorner = prevDpr < 0 && !isPrevPointSharpCorner
     const isNextPointSharpCorner = nextDpr !== null && nextDpr < 0
